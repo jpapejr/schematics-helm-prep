@@ -1,6 +1,17 @@
+data "ibm_resource_group" "resource_group" {
+  name = "${var.resource_group}"
+}
+
+data "ibm_container_cluster" "cluster" {
+    cluster_name_id     = "${var.cluster_name}"
+    region              = "${var.region}"
+    resource_group_id   = "${data.ibm_resource_group.resource_group.id}"
+}
+
+
 data "ibm_container_cluster_config" "cluster_config" {
-  cluster_name_id   = "${var.cluster_name}"
-  resource_group_id = "${var.resource_group}"
+  cluster_name_id   = "${data.ibm_container_cluster.cluster.id}"
+  resource_group_id = "${data.ibm_resource_group.resource_group.id}"
   region            = "${var.region}"
   config_dir        = "/tmp"
 }
